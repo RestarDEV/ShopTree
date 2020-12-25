@@ -67,7 +67,7 @@ class _EditTreeMenuState extends State<EditTreeMenu> {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: Text('คุณต้องการจะ เปลี่ยนแปลง เมนูอาหาร จริงๆ นะ ?'),
+        title: Text('คุณต้องการจะ เปลี่ยนแปลง เมนูต้นไม้ จริงๆ นะ ?'),
         children: <Widget>[
           Row(
             children: <Widget>[
@@ -150,7 +150,7 @@ class _EditTreeMenuState extends State<EditTreeMenu> {
               onChanged: (value) => name = value.trim(),
               initialValue: name,
               decoration: InputDecoration(
-                labelText: 'ชื่อ เมนู อาหาร',
+                labelText: 'ชื่อ เมนู ต้นไม้',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -169,7 +169,7 @@ class _EditTreeMenuState extends State<EditTreeMenu> {
               keyboardType: TextInputType.number,
               initialValue: price,
               decoration: InputDecoration(
-                labelText: 'ราคา อาหาร',
+                labelText: 'ราคา ต้นไม้',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -189,7 +189,7 @@ class _EditTreeMenuState extends State<EditTreeMenu> {
               keyboardType: TextInputType.multiline,
               initialValue: detail,
               decoration: InputDecoration(
-                labelText: 'รายละเอียด อาหาร',
+                labelText: 'รายละเอียด ต้นไม้',
                 border: OutlineInputBorder(),
               ),
             ),

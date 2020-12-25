@@ -10,12 +10,12 @@ import 'package:treeshop/screens/edit_info_shop.dart';
 import 'package:treeshop/utility/my_constant.dart';
 import 'package:treeshop/utility/my_style.dart';
 
-class InformationShop extends StatefulWidget {
+class InfomationShop extends StatefulWidget {
   @override
-  _InformationShopState createState() => _InformationShopState();
+  _InfomationShopState createState() => _InfomationShopState();
 }
 
-class _InformationShopState extends State<InformationShop> {
+class _InfomationShopState extends State<InfomationShop> {
   UserModel userModel;
 
   @override

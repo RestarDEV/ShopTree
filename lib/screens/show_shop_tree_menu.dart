@@ -30,14 +30,14 @@ class _ShowShopTreeMenuState extends State<ShowShopTreeMenu> {
 
   BottomNavigationBarItem aboutShopNav() {
     return BottomNavigationBarItem(
-      icon: Icon(Icons.restaurant),
+      icon: Icon(Icons.description),
       title: Text('รายละเอียดร้าน'),
     );
   }
 
   BottomNavigationBarItem showMenuTreeNav() {
     return BottomNavigationBarItem(
-      icon: Icon(Icons.restaurant_menu),
+      icon: Icon(Icons.developer_board),
       title: Text('เมนูต้นไม้'),
     );
   }
@@ -46,6 +46,7 @@ class _ShowShopTreeMenuState extends State<ShowShopTreeMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[MyStyle().iconShowCart(context)],
         title: Text(userModel.nameShop),
       ),
       body: listWigets.length == 0

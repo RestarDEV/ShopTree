@@ -27,9 +27,9 @@ class _AddTreeMenuState extends State<AddTreeMenu> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            showTitleTree('รูปอาหาร'),
+            showTitleTree('รูปต้นไม้'),
             groupImage(),
-            showTitleTree('รายละเอียดอาหาร'),
+            showTitleTree('รายละเอียดต้นไม้'),
             nameForm(),
             MyStyle().mySizebox(),
             priceForm(),
@@ -105,7 +105,7 @@ class _AddTreeMenuState extends State<AddTreeMenu> {
         child: TextField(
           onChanged: (value) => nameTree = value.trim(),
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.fastfood),
+            prefixIcon: Icon(Icons.grass),
             labelText: 'ชื่อต้นไม้',
             border: OutlineInputBorder(),
           ),

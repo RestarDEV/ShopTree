@@ -9,12 +9,12 @@ import 'package:treeshop/screens/edit_tree_menu.dart';
 import 'package:treeshop/utility/my_constant.dart';
 import 'package:treeshop/utility/my_style.dart';
 
-class ListTreeMentShop extends StatefulWidget {
+class ListTreeMenuShop extends StatefulWidget {
   @override
-  _ListTreeMentShopState createState() => _ListTreeMentShopState();
+  _ListTreeMenuShopState createState() => _ListTreeMenuShopState();
 }
 
-class _ListTreeMentShopState extends State<ListTreeMentShop> {
+class _ListTreeMenuShopState extends State<ListTreeMenuShop> {
   bool loadStatus = true; // ยังโหลดไม่เสร็จ
   bool status = true; // มีข้อมูล
   List<TreeModel> treeModels = List();

@@ -1,11 +1,27 @@
+
 import 'package:flutter/material.dart';
+import 'package:treeshop/screens/show_cart.dart';
 
 class MyStyle {
   Color darkColor = Colors.blue.shade900;
   Color primaryColor = Colors.green;
 
-  Widget showProgress(){
-    return Center(child: CircularProgressIndicator(),);
+  Widget iconShowCart(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.add_shopping_cart),
+      onPressed: () {
+        MaterialPageRoute route = MaterialPageRoute(
+          builder: (context) => ShowCart(),
+        );
+        Navigator.push(context, route);
+      },
+    );
+  }
+
+  Widget showProgress() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
   }
 
   TextStyle mainTitle = TextStyle(
@@ -35,12 +51,11 @@ class MyStyle {
 
   Widget titleCenter(BuildContext context, String string) {
     return Center(
-      child: Container(width: MediaQuery.of(context).size.width*0.5,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.5,
         child: Text(
           string,
-          style: TextStyle(
-            fontSize: 24.0, 
-            fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -69,7 +84,34 @@ class MyStyle {
         style: TextStyle(
           fontSize: 16.0,
           color: Colors.blue.shade900,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+
+  Text showTitleH3White(String title) => Text(
+        title,
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+
+   Text showTitleH3Red(String title) => Text(
+        title,
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.red.shade900,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+
+    Text showTitleH3Purple(String title) => Text(
+        title,
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.purple.shade700,
+          fontWeight: FontWeight.w500,
         ),
       );
 

@@ -71,37 +71,34 @@ class _SignUpState extends State<SignUp> {
         ),
       );
 
-      Future<Null> checkUser()async{
-        String url = '${MyConstant().domain}/treeshop/getUserWhereUser.php?isAdd=true&User=$user';
-        try {
-          Response response = await Dio().get(url);
-          if (response.toString() == 'null') {
-            registerThread();
-          } else {
-            normalDialog(context, 'User นี้มีผู้ใช้งานแล้ว');
-          }
-        } catch (e) {
-        }
-      
+  Future<Null> checkUser() async {
+    String url =
+        '${MyConstant().domain}/treeshop/getUserWhereUser.php?isAdd=true&User=$user';
+    try {
+      Response response = await Dio().get(url);
+      if (response.toString() == 'null') {
+        registerThread();
+      } else {
+        normalDialog(context, 'User นี้มีผู้ใช้งานแล้ว');
       }
+    } catch (e) {}
+  }
 
-      Future<Null> registerThread()async{
-        String url = '${MyConstant().domain}/treeshop/addUser.php?isAdd=true&Name=$name&User=$user&Password=$password&ChooseType=$chooseType';
-      
-      try{
-        Response response = await Dio().get(url);
-        print('res = $response');
+  Future<Null> registerThread() async {
+    String url =
+        '${MyConstant().domain}/treeshop/addUser.php?isAdd=true&Name=$name&User=$user&Password=$password&ChooseType=$chooseType';
 
-        if (response.toString() == 'true') {
-          Navigator.pop(context);
-        } else {
-          normalDialog(context, 'ไม่สารถสมัครได้');
-        }
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
 
-      } catch (e){
-
+      if (response.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normalDialog(context, 'ไม่สารถสมัครได้');
       }
-    }
+    } catch (e) {}
+  }
 
   Widget userRedio() => Row(
         mainAxisAlignment: MainAxisAlignment.center,

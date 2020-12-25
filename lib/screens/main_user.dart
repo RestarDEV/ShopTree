@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:treeshop/screens/show_cart.dart';
 import 'package:treeshop/utility/my_style.dart';
 import 'package:treeshop/utility/signout_process.dart';
 import 'package:treeshop/widget/show_list_shop_all.dart';
@@ -34,6 +35,7 @@ class _MainUserState extends State<MainUser> {
       appBar: AppBar(
         title: Text(nameUser == null ? 'Main User' : '$nameUser login'),
         actions: <Widget>[
+          MyStyle().iconShowCart(context),
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () => signOutProcess(context),
@@ -53,6 +55,7 @@ class _MainUserState extends State<MainUser> {
               children: <Widget>[
                 showHead(),
                 menuListShop(),
+                menuCart(),
                 menuStatusTreeOrder(),
               ],
             ),
@@ -67,12 +70,13 @@ class _MainUserState extends State<MainUser> {
       );
 
   ListTile menuListShop() {
-    return ListTile(onTap: () {
-      Navigator.pop(context);
-      setState(() {
-        currentWidget = ShowListShopAll();
-      });
-    },
+    return ListTile(
+      onTap: () {
+        Navigator.pop(context);
+        setState(() {
+          currentWidget = ShowListShopAll();
+        });
+      },
       leading: Icon(Icons.home),
       title: Text('แสดงร้านค้า'),
       subtitle: Text('แสดงร้านค้าที่อยู่ใกล้คุณ'),
@@ -80,13 +84,14 @@ class _MainUserState extends State<MainUser> {
   }
 
   ListTile menuStatusTreeOrder() {
-    return ListTile(onTap: () {
-      setState(() {
-        Navigator.pop(context);
-        currentWidget = ShowStatusTreeOrder();
-      });
-    },
-      leading: Icon(Icons.restaurant_menu),
+    return ListTile(
+      onTap: () {
+        setState(() {
+          Navigator.pop(context);
+          currentWidget = ShowStatusTreeOrder();
+        });
+      },
+      leading: Icon(Icons.developer_board),
       title: Text('แสดงรายการต้นไม้ที่สั่ง'),
       subtitle: Text('ดูสถานะของต้นไม้ที่สั่ง'),
     );
@@ -94,7 +99,7 @@ class _MainUserState extends State<MainUser> {
 
   Widget menuSignOut() {
     return Container(
-      decoration: BoxDecoration(color: Colors.orange.shade700),
+      decoration: BoxDecoration(color: Colors.green.shade700),
       child: ListTile(
         onTap: () => signOutProcess(context),
         leading: Icon(
@@ -119,12 +124,27 @@ class _MainUserState extends State<MainUser> {
       currentAccountPicture: MyStyle().showLogo(),
       accountName: Text(
         nameUser == null ? 'Name Login' : nameUser,
-        style: TextStyle(color: MyStyle().darkColor),
+        style: TextStyle(color: Colors.black),
       ),
       accountEmail: Text(
         'Login',
         style: TextStyle(color: MyStyle().primaryColor),
       ),
+    );
+  }
+
+  Widget menuCart() {
+    return ListTile(
+      leading: Icon(Icons.add_shopping_cart),
+      title: Text('ตะกร้าของฉัน'),
+      subtitle: Text('รายการอาหารที่อยู่ในตะกร้า'),
+      onTap: () {
+        Navigator.pop(context);
+        MaterialPageRoute route = MaterialPageRoute(
+          builder: (context) => ShowCart(),
+        );
+        Navigator.push(context, route);
+      },
     );
   }
 }

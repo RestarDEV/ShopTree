@@ -4,15 +4,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:toast/toast.dart';
+import 'package:treeshop/model/cart_model.dart';
 import 'package:treeshop/model/tree_model.dart';
 import 'package:treeshop/model/user_model.dart';
 import 'package:treeshop/utility/my_api.dart';
 import 'package:treeshop/utility/my_constant.dart';
 import 'package:treeshop/utility/my_style.dart';
+import 'package:treeshop/utility/normal_dialog.dart';
+import 'package:treeshop/utility/sqlite_helper.dart';
 
 class ShowMenuTree extends StatefulWidget {
   final UserModel userModel;
-
   ShowMenuTree({Key key, this.userModel}) : super(key: key);
   @override
   _ShowMenuTreeState createState() => _ShowMenuTreeState();
@@ -32,13 +35,14 @@ class _ShowMenuTreeState extends State<ShowMenuTree> {
     super.initState();
     userModel = widget.userModel;
     readTreeMenu();
+    findLocation();
   }
 
   Future<Null> findLocation() async {
     location.onLocationChanged.listen((event) {
       lat1 = event.latitude;
       lng1 = event.longitude;
-      // print('lat1 = $lat1, lng1 = $lng1');
+      // print('lat1= $lat1, lng1 = $lng1');
     });
   }
 
@@ -47,7 +51,7 @@ class _ShowMenuTreeState extends State<ShowMenuTree> {
     String url =
         '${MyConstant().domain}/treeshop/getTreeWhereIdShop.php?isAdd=true&idShop=$idShop';
     Response response = await Dio().get(url);
-    // print('res ==> $response');
+    // print('res --> $response');
 
     var result = json.decode(response.data);
     // print('result = $result');
@@ -92,7 +96,7 @@ class _ShowMenuTreeState extends State<ShowMenuTree> {
                         Text(
                           '${treeModels[index].price} บาท',
                           style: TextStyle(
-                            fontSize: 30,
+                            fontSize: 40,
                             color: MyStyle().darkColor,
                             fontWeight: FontWeight.bold,
                           ),
@@ -100,8 +104,8 @@ class _ShowMenuTreeState extends State<ShowMenuTree> {
                         Row(
                           children: <Widget>[
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.5 -
-                                  18.0,
+                              width:
+                                  MediaQuery.of(context).size.width * 0.5 - 8.0,
                               child: Text(treeModels[index].detail),
                             ),
                           ],
@@ -121,7 +125,7 @@ class _ShowMenuTreeState extends State<ShowMenuTree> {
       width: MediaQuery.of(context).size.width * 0.5 - 16.0,
       height: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20), //ขอบโค้ง
+        borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
           image: NetworkImage(
               '${MyConstant().domain}${treeModels[index].pathImage}'),
@@ -154,44 +158,47 @@ class _ShowMenuTreeState extends State<ShowMenuTree> {
                 width: 180,
                 height: 130,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    image: DecorationImage(
-                        image: NetworkImage(
-                            '${MyConstant().domain}${treeModels[index].pathImage}'),
-                        fit: BoxFit.cover)),
+                  borderRadius: BorderRadius.circular(30),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          '${MyConstant().domain}${treeModels[index].pathImage}'),
+                      fit: BoxFit.cover),
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   IconButton(
-                      icon: Icon(
-                        Icons.add_circle,
-                        size: 36,
-                        color: Colors.green,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          amount++;
-                          // print('amount = $amount');
-                        });
-                      }),
+                    icon: Icon(
+                      Icons.add_circle,
+                      size: 36,
+                      color: Colors.green,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        amount++;
+                        // print('amount = $amount');
+                      });
+                    },
+                  ),
                   Text(
                     amount.toString(),
                     style: MyStyle().mainTitle,
                   ),
                   IconButton(
-                      icon: Icon(
-                        Icons.remove_circle,
-                        size: 36,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        if (amount > 1) {
-                          setState(() {
-                            amount--;
-                          });
-                        }
-                      })
+                    icon: Icon(
+                      Icons.remove_circle,
+                      size: 36,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      if (amount > 1) {
+                        setState(() {
+                          amount--;
+                        });
+                      }
+                    },
+                  )
                 ],
               ),
               Row(
@@ -205,7 +212,8 @@ class _ShowMenuTreeState extends State<ShowMenuTree> {
                           borderRadius: BorderRadius.circular(15)),
                       onPressed: () {
                         Navigator.pop(context);
-                        //print('Order ${treeModels[index].nameTree} = $amount');
+                        // print(
+                        //     'Order ${treeModels[index].nameTree} Amount = $amount');
 
                         addOrderToCart(index);
                       },
@@ -227,7 +235,7 @@ class _ShowMenuTreeState extends State<ShowMenuTree> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                  ),
+                  )
                 ],
               )
             ],
@@ -244,18 +252,64 @@ class _ShowMenuTreeState extends State<ShowMenuTree> {
     String price = treeModels[index].price;
 
     int priceInt = int.parse(price);
-    int sumInt = priceInt = amount;
+    int sumInt = priceInt * amount;
 
     lat2 = double.parse(userModel.lat);
     lng2 = double.parse(userModel.lng);
     double distance = MyAPI().calculateDistance(lat1, lng1, lat2, lng2);
 
-    var myFormat = NumberFormat('##0.0#','en_US');
+    var myFormat = NumberFormat('##0.0#', 'en_US');
     String distanceString = myFormat.format(distance);
 
     int transport = MyAPI().calculateTransport(distance);
 
     print(
-        'idShop = $idShop, nameShop = $nameShop,idTree = $idTree,nameTree = $nameTree,price = $price,amount = $amount,sum = $sumInt,distance = $distanceString,transport = $transport');
+        'idShop = $idShop, nameShop = $nameShop, idTree = $idTree, nameTree = $nameTree, price = $price, amount = $amount, sum = $sumInt, distance = $distanceString, transport = $transport');
+
+    Map<String, dynamic> map = Map();
+
+    map['idShop'] = idShop;
+    map['nameShop'] = nameShop;
+    map['idTree'] = idTree;
+    map['nameTree'] = nameTree;
+    map['price'] = price;
+    map['amount'] = amount.toString();
+    map['sum'] = sumInt.toString();
+    map['distance'] = distanceString;
+    map['transport'] = transport.toString();
+
+    print('map ==> ${map.toString()}');
+
+    CartModel cartModel = CartModel.fromJson(map);
+
+    var object = await SQLiteHelper().readAllDataFromSQLite();
+    print('object lenght = ${object.length}');
+
+    if (object.length == 0) {
+      await SQLiteHelper().insertDataToSQLite(cartModel).then((value) {
+        print('Insert Success');
+        showToast('Insert Success');
+      });
+    } else {
+      String idShopSQLite = object[0].idShop;
+      print('idShopSQLite ==> $idShopSQLite');
+      if (idShop == idShopSQLite) {
+        await SQLiteHelper().insertDataToSQLite(cartModel).then((value) {
+          print('Insert Success');
+          showToast('Insert Success');
+        });
+      } else {
+        normalDialog(context,
+            'ตะกร้ามี รายการอาหารของ ร้าน ${object[0].nameShop} กรุณา ซืือจากร้านนี่ให้ จบก่อน คะ');
+      }
+    }
+  }
+
+  void showToast(String string) {
+    Toast.show(
+      string,
+      context,
+      duration: Toast.LENGTH_LONG,
+    );
   }
 }
